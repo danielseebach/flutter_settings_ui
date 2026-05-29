@@ -36,6 +36,17 @@ class AndroidSettingsTile extends StatelessWidget {
     final theme = SettingsTheme.of(context);
     // final scaleFactor = MediaQuery.of(context).textScaleFactor;
     final scaleFactor = MediaQuery.textScalerOf(context).scale(1);
+    final leadingStartPadding =
+        theme.themeData.androidLeadingStartPadding ?? 24;
+    final contentHorizontalPadding =
+        theme.themeData.androidTileHorizontalPadding ?? 24;
+    final contentVerticalPadding =
+        theme.themeData.androidTileVerticalPadding ?? 19;
+    final titleFontSize = theme.themeData.androidTitleFontSize ?? 18;
+    final titleFontWeight =
+        theme.themeData.androidTitleFontWeight ?? FontWeight.w400;
+    final tileBackgroundColor =
+        backgroundColor ?? theme.themeData.androidTileBackgroundColor;
     final cantShowAnimation = tileType == SettingsTileType.switchTile
         ? onToggle == null && onPressed == null
         : onPressed == null;
@@ -43,7 +54,7 @@ class AndroidSettingsTile extends StatelessWidget {
     return IgnorePointer(
       ignoring: !enabled,
       child: Material(
-        color: backgroundColor ?? Colors.transparent,
+        color: tileBackgroundColor ?? Colors.transparent,
         child: InkWell(
           onTap: cantShowAnimation
               ? null
@@ -59,7 +70,8 @@ class AndroidSettingsTile extends StatelessWidget {
             children: [
               if (leading != null)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 24),
+                  padding:
+                      EdgeInsetsDirectional.only(start: leadingStartPadding),
                   child: IconTheme(
                     data: IconTheme.of(context).copyWith(
                       color: enabled
@@ -72,10 +84,10 @@ class AndroidSettingsTile extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: EdgeInsetsDirectional.only(
-                    start: 24,
-                    end: 24,
-                    bottom: 19 * scaleFactor,
-                    top: 19 * scaleFactor,
+                    start: contentHorizontalPadding,
+                    end: contentHorizontalPadding,
+                    bottom: contentVerticalPadding * scaleFactor,
+                    top: contentVerticalPadding * scaleFactor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,8 +97,8 @@ class AndroidSettingsTile extends StatelessWidget {
                           color: enabled
                               ? theme.themeData.settingsTileTextColor
                               : theme.themeData.inactiveTitleColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          fontSize: titleFontSize,
+                          fontWeight: titleFontWeight,
                         ),
                         child: title ?? Container(),
                       ),
@@ -127,7 +139,7 @@ class AndroidSettingsTile extends StatelessWidget {
                       child: Switch(
                         value: initialValue,
                         onChanged: onToggle,
-                        activeColor: enabled
+                        activeThumbColor: enabled
                             ? activeSwitchColor
                             : theme.themeData.inactiveTitleColor,
                       ),
@@ -140,7 +152,7 @@ class AndroidSettingsTile extends StatelessWidget {
                   child: Switch(
                     value: initialValue,
                     onChanged: onToggle,
-                    activeColor: enabled
+                    activeThumbColor: enabled
                         ? activeSwitchColor
                         : theme.themeData.inactiveTitleColor,
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter_settings_ui_example/screens/gallery/android_settings_screen.dart';
+import 'package:flutter_settings_ui_example/screens/gallery/android_style_comparison_screen.dart';
 import 'package:flutter_settings_ui_example/screens/gallery/cross_platform_settings_screen.dart';
 import 'package:flutter_settings_ui_example/screens/gallery/ios_developer_screen.dart';
 import 'package:flutter_settings_ui_example/screens/gallery/web_chrome_settings.dart';
@@ -54,6 +55,18 @@ class GalleryScreen extends StatelessWidget {
                   Navigation.navigateTo(
                     context: context,
                     screen: AndroidSettingsScreen(),
+                    style: NavigationRouteStyle.material,
+                  );
+                },
+              ),
+              SettingsTile.navigation(
+                leading: Icon(Icons.compare),
+                title: Text('Android Legacy vs SDK 36+'),
+                description: Text('Screenshot-friendly side-by-side preview'),
+                onPressed: (context) {
+                  Navigation.navigateTo(
+                    context: context,
+                    screen: AndroidStyleComparisonScreen(),
                     style: NavigationRouteStyle.material,
                   );
                 },

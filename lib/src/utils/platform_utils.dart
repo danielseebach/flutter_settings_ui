@@ -1,6 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_settings_ui/src/utils/android_sdk_int_stub.dart'
+    if (dart.library.io) 'package:flutter_settings_ui/src/utils/android_sdk_int_io.dart'
+    as android_sdk;
+import 'package:flutter_settings_ui/src/utils/ios_version_int_stub.dart'
+    if (dart.library.io) 'package:flutter_settings_ui/src/utils/ios_version_int_io.dart'
+    as ios_version;
+
 /// Since we cannot extend targetPlatfom, create own enum.
 enum DevicePlatform {
   /// Android: <https://www.android.com/>
@@ -47,4 +54,29 @@ DevicePlatform detectPlatform(BuildContext context) {
     case TargetPlatform.windows:
       return DevicePlatform.windows;
   }
+}
+
+int? detectAndroidSdkInt(DevicePlatform platform) {
+  if (platform != DevicePlatform.android) {
+    return null;
+  }
+
+  return android_sdk.readAndroidSdkInt();
+}
+
+Future<int?> resolveAndroidSdkInt(DevicePlatform platform) async {
+  if (platform != DevicePlatform.android) {
+    return null;
+  }
+
+  final sdkInt = await android_sdk.readAndroidSdkIntAsync();
+  return sdkInt ?? detectAndroidSdkInt(platform);
+}
+
+int? detectIosMajorVersion(DevicePlatform platform) {
+  if (platform != DevicePlatform.iOS) {
+    return null;
+  }
+
+  return ios_version.readIosMajorVersion();
 }

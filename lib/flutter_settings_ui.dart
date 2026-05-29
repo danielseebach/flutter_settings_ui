@@ -1,4 +1,5 @@
 export 'package:flutter_settings_ui/src/list/settings_list.dart';
+export 'package:flutter_settings_ui/src/list/sliver_settings_list.dart';
 export 'package:flutter_settings_ui/src/sections/abstract_settings_section.dart';
 export 'package:flutter_settings_ui/src/sections/custom_settings_section.dart';
 export 'package:flutter_settings_ui/src/sections/settings_section.dart';

@@ -51,11 +51,15 @@ class SettingsList extends StatelessWidget {
     }
 
     final brightness = calculateBrightness(context);
+    final androidSdkInt = detectAndroidSdkInt(platform);
+    final iosVersionInt = detectIosMajorVersion(platform);
 
     final themeData = getTheme(
       context: context,
       platform: platform,
       brightness: brightness,
+      androidSdkInt: androidSdkInt,
+      iosVersionInt: iosVersionInt,
     ).merge(theme: brightness == Brightness.dark ? darkTheme : lightTheme);
 
     return Container(
@@ -67,6 +71,8 @@ class SettingsList extends StatelessWidget {
           return SettingsTheme(
             themeData: themeData,
             platform: platform,
+            androidSdkInt: androidSdkInt,
+            iosVersionInt: iosVersionInt,
             child: ListView.builder(
               physics: physics,
               shrinkWrap: shrinkWrap,

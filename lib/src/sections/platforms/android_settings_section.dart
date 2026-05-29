@@ -21,13 +21,45 @@ class AndroidSettingsSection extends StatelessWidget {
 
   Widget buildSectionBody(BuildContext context) {
     final theme = SettingsTheme.of(context);
+    final isSdk36OrAbove = theme.isAndroidSdk36OrAbove;
     final scaleFactor = MediaQuery.textScalerOf(context).scale(1);
-    final tileList = Column(
-      children: tiles,
-    );
+    final titleHorizontalPadding =
+        theme.themeData.androidTileHorizontalPadding ?? 24;
+    final titleTopPadding = theme.themeData.androidSectionTitleTopPadding ?? 24;
+    final titleBottomPadding =
+        theme.themeData.androidSectionTitleBottomPadding ?? 10;
+    final gapBetweenTiles =
+        isSdk36OrAbove ? (theme.themeData.androidGapBetweenTiles ?? 4) : 0.0;
+    final sectionBorderRadius = theme.themeData.androidSectionBorderRadius ?? 0;
+
+    final tileChildren = <Widget>[];
+    for (var index = 0; index < tiles.length; index++) {
+      tileChildren.add(tiles[index]);
+      if (gapBetweenTiles > 0 && index != tiles.length - 1) {
+        tileChildren.add(SizedBox(height: gapBetweenTiles));
+      }
+    }
+
+    final tileList = Column(children: tileChildren);
+
+    final sectionBody = isSdk36OrAbove
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(sectionBorderRadius),
+            child: Container(
+              color: theme.themeData.settingsSectionBackground,
+              child: tileList,
+            ),
+          )
+        : Container(
+            color: theme.themeData.settingsSectionBackground,
+            padding: EdgeInsets.symmetric(
+              horizontal: titleHorizontalPadding,
+            ),
+            child: tileList,
+          );
 
     if (title == null) {
-      return tileList;
+      return sectionBody;
     }
 
     return Column(
@@ -35,10 +67,10 @@ class AndroidSettingsSection extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.only(
-            top: 24 * scaleFactor,
-            bottom: 10 * scaleFactor,
-            start: 24,
-            end: 24,
+            top: titleTopPadding * scaleFactor,
+            bottom: titleBottomPadding * scaleFactor,
+            start: titleHorizontalPadding,
+            end: titleHorizontalPadding,
           ),
           child: DefaultTextStyle(
             style: TextStyle(
@@ -47,10 +79,7 @@ class AndroidSettingsSection extends StatelessWidget {
             child: title!,
           ),
         ),
-        Container(
-          color: theme.themeData.settingsSectionBackground,
-          child: tileList,
-        ),
+        sectionBody,
       ],
     );
   }

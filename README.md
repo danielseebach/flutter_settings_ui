@@ -14,11 +14,33 @@ Please checkout the changelog for all changes.
 In your pubspec.yaml
 ```yaml
 dependencies:
-  flutter_settings_ui: ^3.0.0
+  flutter_settings_ui: ^3.0.2
 ```
 ```dart
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 ```
+
+## Android SDK 36+ behavior:
+On Android SDK 36 and newer, the package automatically applies refreshed settings spacing, typography, and color tokens.
+On older Android SDK versions, the legacy Android settings style is preserved.
+
+## SettingsTheme token usage:
+`SettingsList` and `SliverSettingsList` automatically resolve platform + system version, build defaults with `getTheme(...)`, then merge your `lightTheme` / `darkTheme` overrides.
+
+The following `SettingsThemeData` fields are automatically consumed by built-in widgets:
+
+| Platform | Widget(s) | Automatically used fields |
+| --- | --- | --- |
+| Android | `AndroidSettingsTile` | `tileHighlightColor`, `leadingIconsColor`, `settingsTileTextColor`, `tileDescriptionTextColor`, `inactiveTitleColor`, `inactiveSubtitleColor`, `androidTileHorizontalPadding`, `androidTileVerticalPadding`, `androidLeadingStartPadding`, `androidTitleFontSize`, `androidTitleFontWeight`, `androidTileBackgroundColor` |
+| Android | `AndroidSettingsSection` | `titleTextColor`, `settingsSectionBackground`, `androidTileHorizontalPadding`, `androidSectionTitleTopPadding`, `androidSectionTitleBottomPadding` |
+| iOS/macOS/windows path | `IOSSettingsTile` | `settingsSectionBackground`, `settingsListBackground`, `tileHighlightColor`, `leadingIconsColor`, `settingsTileTextColor`, `titleTextColor`, `trailingTextColor`, `inactiveTitleColor` |
+| iOS/macOS/windows path | `IOSSettingsSection` | `titleTextColor` |
+| Web | `WebSettingsTile` | `tileHighlightColor`, `leadingIconsColor`, `settingsTileTextColor`, `tileDescriptionTextColor` |
+| Web | `WebSettingsSection` | `titleTextColor`, `settingsSectionBackground` |
+
+Notes:
+- Tile-level `backgroundColor` still overrides theme background for that tile.
+- Unused fields in a platform renderer are ignored for that renderer.
 
 
 ## Basic Usage:

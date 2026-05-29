@@ -1,3 +1,8 @@
+## 3.0.2
+Updated Android styling to automatically use refreshed settings tokens on Android SDK 36 and newer while preserving legacy Android visuals on older SDK versions.
+Added internal SDK-aware Android spacing/typography tokens for sections and tiles.
+Added tests that verify Android SDK 35/36 theme branching and non-Android isolation.
+
 ## 3.0.1
 Fixed an issue which caused a double scroll animation on Android.
 
