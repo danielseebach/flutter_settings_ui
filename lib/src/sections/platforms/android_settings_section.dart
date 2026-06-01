@@ -43,18 +43,17 @@ class AndroidSettingsSection extends StatelessWidget {
     final tileList = Column(children: tileChildren);
 
     final sectionBody = isSdk36OrAbove
-        ? ClipRRect(
-            borderRadius: BorderRadius.circular(sectionBorderRadius),
-            child: Container(
+        ? Container(
+            margin: EdgeInsets.symmetric(horizontal: titleHorizontalPadding),
+            decoration: BoxDecoration(
               color: theme.themeData.settingsSectionBackground,
-              child: tileList,
+              borderRadius: BorderRadius.circular(sectionBorderRadius),
             ),
+            clipBehavior: Clip.hardEdge,
+            child: tileList,
           )
         : Container(
             color: theme.themeData.settingsSectionBackground,
-            padding: EdgeInsets.symmetric(
-              horizontal: titleHorizontalPadding,
-            ),
             child: tileList,
           );
 

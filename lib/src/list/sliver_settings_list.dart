@@ -35,9 +35,9 @@ class SliverSettingsList extends StatefulWidget {
 }
 
 class _SliverSettingsListState extends State<SliverSettingsList> {
-  Future<int?>? _androidSdkFuture;
-  int? _androidSdkFallback;
-  DevicePlatform? _androidFuturePlatform;
+  Future<_PlatformVersions?>? _platformVersionsFuture;
+  _PlatformVersions? _platformVersionsFallback;
+  DevicePlatform? _versionsFuturePlatform;
 
   @override
   Widget build(BuildContext context) {
@@ -48,53 +48,75 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
       platform = widget.platform!;
     }
 
-    _ensureAndroidSdkFuture(platform);
+    _ensureVersionsFuture(platform);
 
-    if (_androidSdkFuture == null) {
+    if (_platformVersionsFuture == null) {
       return _buildSliver(
         context: context,
         platform: platform,
         androidSdkInt: null,
+        iosVersionInt: null,
       );
     }
 
-    return FutureBuilder<int?>(
-      future: _androidSdkFuture,
-      initialData: _androidSdkFallback,
+    return FutureBuilder<_PlatformVersions?>(
+      future: _platformVersionsFuture,
+      initialData: _platformVersionsFallback,
       builder: (context, snapshot) {
+        final resolvedVersions = snapshot.data ?? _platformVersionsFallback;
         return _buildSliver(
           context: context,
           platform: platform,
-          androidSdkInt: snapshot.data ?? _androidSdkFallback,
+          androidSdkInt: resolvedVersions?.androidSdkInt,
+          iosVersionInt: resolvedVersions?.iosVersionInt,
         );
       },
     );
   }
 
-  void _ensureAndroidSdkFuture(DevicePlatform platform) {
-    if (platform != DevicePlatform.android) {
-      _androidFuturePlatform = platform;
-      _androidSdkFuture = null;
-      _androidSdkFallback = null;
+  void _ensureVersionsFuture(DevicePlatform platform) {
+    if (platform != DevicePlatform.android && platform != DevicePlatform.iOS) {
+      _versionsFuturePlatform = platform;
+      _platformVersionsFuture = null;
+      _platformVersionsFallback = null;
       return;
     }
 
-    if (_androidFuturePlatform == platform && _androidSdkFuture != null) {
+    if (_versionsFuturePlatform == platform &&
+        _platformVersionsFuture != null) {
       return;
     }
 
-    _androidFuturePlatform = platform;
-    _androidSdkFallback = detectAndroidSdkInt(platform);
-    _androidSdkFuture = resolveAndroidSdkInt(platform);
+    _versionsFuturePlatform = platform;
+    _platformVersionsFallback = _PlatformVersions(
+      androidSdkInt: detectAndroidSdkInt(platform),
+      iosVersionInt: detectIosMajorVersion(platform),
+    );
+
+    if (platform == DevicePlatform.android) {
+      _platformVersionsFuture = resolveAndroidSdkInt(platform).then(
+        (sdkInt) => _PlatformVersions(
+          androidSdkInt: sdkInt ?? _platformVersionsFallback?.androidSdkInt,
+        ),
+      );
+      return;
+    }
+
+    _platformVersionsFuture = resolveIosMajorVersion(platform).then(
+      (iosVersionInt) => _PlatformVersions(
+        iosVersionInt:
+            iosVersionInt ?? _platformVersionsFallback?.iosVersionInt,
+      ),
+    );
   }
 
   Widget _buildSliver({
     required BuildContext context,
     required DevicePlatform platform,
     required int? androidSdkInt,
+    required int? iosVersionInt,
   }) {
     final brightness = calculateBrightness(context, platform);
-    final iosVersionInt = detectIosMajorVersion(platform);
 
     final themeData = getTheme(
       context: context,
@@ -210,4 +232,14 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
             : cupertinoBrightness;
     }
   }
+}
+
+class _PlatformVersions {
+  const _PlatformVersions({
+    this.androidSdkInt,
+    this.iosVersionInt,
+  });
+
+  final int? androidSdkInt;
+  final int? iosVersionInt;
 }

@@ -83,10 +83,10 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(
         top: additionalInfo.enableTopBorderRadius
-            ? const Radius.circular(12)
+            ? Radius.circular((theme.iosVersionInt ?? 0) >= 26 ? 24 : 12)
             : Radius.zero,
         bottom: additionalInfo.enableBottomBorderRadius
-            ? const Radius.circular(12)
+            ? Radius.circular((theme.iosVersionInt ?? 0) >= 26 ? 24 : 12)
             : Radius.zero,
       ),
       child: content,
@@ -206,7 +206,9 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
             (isPressed
                 ? theme.themeData.tileHighlightColor
                 : theme.themeData.settingsSectionBackground),
-        padding: const EdgeInsetsDirectional.only(start: 18),
+        padding: const EdgeInsetsDirectional.only(
+          start: 18,
+        ),
         child: Row(
           children: [
             if (widget.leading != null)
@@ -223,7 +225,7 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
               ),
             Expanded(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
@@ -238,12 +240,18 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
                                 padding: EdgeInsetsDirectional.only(
                                   top: widget.description != null &&
                                           widget.descriptionInline
-                                      ? 6
-                                      : 12.5 * scaleFactor,
+                                      ? (theme.iosVersionInt ?? 0) >= 26
+                                          ? 18
+                                          : 6
+                                      : (theme.iosVersionInt ?? 0) >= 26
+                                          ? 18
+                                          : 12.5 * scaleFactor,
                                   bottom: widget.description != null &&
                                           widget.descriptionInline
                                       ? 3
-                                      : 12.5 * scaleFactor,
+                                      : (theme.iosVersionInt ?? 0) >= 26
+                                          ? 18
+                                          : 12.5 * scaleFactor,
                                 ),
                                 child: DefaultTextStyle(
                                   style: TextStyle(

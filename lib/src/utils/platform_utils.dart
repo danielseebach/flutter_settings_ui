@@ -80,3 +80,12 @@ int? detectIosMajorVersion(DevicePlatform platform) {
 
   return ios_version.readIosMajorVersion();
 }
+
+Future<int?> resolveIosMajorVersion(DevicePlatform platform) async {
+  if (platform != DevicePlatform.iOS) {
+    return null;
+  }
+
+  final version = await ios_version.readIosMajorVersionAsync();
+  return version ?? detectIosMajorVersion(platform);
+}

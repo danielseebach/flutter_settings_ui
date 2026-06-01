@@ -71,33 +71,43 @@ SettingsThemeData _androidTheme({
   final colorScheme = Theme.of(context).colorScheme;
 
   if (isSdk36OrAbove) {
-    final seededSurface = Color.alphaBlend(
-      colorScheme.primary.withValues(alpha: isLight ? 0.04 : 0.08),
-      colorScheme.surface,
-    );
+    const sdk36LightBg = Color(0xFFF0F1F8);
+    const sdk36LightSurface = Color(0xFFFAF8FF);
+    const sdk36LightText = Color(0xFF2F3038);
+    const sdk36LightSubText = Color(0xFF646773);
+
+    const sdk36DarkBg = Color(0xFF17191F);
+    const sdk36DarkSurface = Color(0xFF292C34);
+    const sdk36DarkText = Color(0xFFE7E7F0);
+    const sdk36DarkSubText = Color(0xFFB8BAC6);
+
+    final settingsListBackground = isLight ? sdk36LightBg : sdk36DarkBg;
+    final tileBackground = isLight ? sdk36LightSurface : sdk36DarkSurface;
+    final textColor = isLight ? sdk36LightText : sdk36DarkText;
+    final subTextColor = isLight ? sdk36LightSubText : sdk36DarkSubText;
 
     return SettingsThemeData(
       tileHighlightColor:
           colorScheme.primary.withValues(alpha: isLight ? 0.12 : 0.20),
-      settingsListBackground: seededSurface,
-      settingsSectionBackground: seededSurface,
-      titleTextColor: colorScheme.primary,
-      settingsTileTextColor: colorScheme.onSurface,
-      tileDescriptionTextColor:
-          colorScheme.onSurface.withValues(alpha: isLight ? 0.78 : 0.82),
-      leadingIconsColor:
-          colorScheme.onSurface.withValues(alpha: isLight ? 0.72 : 0.76),
-      inactiveTitleColor:
-          colorScheme.onSurface.withValues(alpha: isLight ? 0.38 : 0.42),
-      inactiveSubtitleColor:
-          colorScheme.onSurface.withValues(alpha: isLight ? 0.32 : 0.36),
-      androidTileHorizontalPadding: 20,
-      androidTileVerticalPadding: 14,
-      androidLeadingStartPadding: 20,
+      settingsListBackground: settingsListBackground,
+      settingsSectionBackground: settingsListBackground,
+      titleTextColor: textColor,
+      settingsTileTextColor: textColor,
+      tileDescriptionTextColor: subTextColor,
+      leadingIconsColor: subTextColor,
+      inactiveTitleColor: subTextColor,
+      inactiveSubtitleColor: subTextColor,
+      androidTileBackgroundColor: tileBackground,
+      androidTileHorizontalPadding: 18,
+      androidTileVerticalPadding: 18,
+      androidLeadingStartPadding: 18,
       androidSectionTitleTopPadding: 20,
       androidSectionTitleBottomPadding: 8,
       androidTitleFontSize: 17,
       androidTitleFontWeight: FontWeight.w500,
+      androidSectionBorderRadius: 28,
+      androidGapBetweenTiles: 2,
+      androidGapBetweenSections: 28,
     );
   }
 
@@ -141,6 +151,7 @@ SettingsThemeData _androidTheme({
     androidSectionTitleBottomPadding: 10,
     androidTitleFontSize: 18,
     androidTitleFontWeight: FontWeight.w400,
+    androidTileBackgroundColor: Colors.transparent,
   );
 }
 

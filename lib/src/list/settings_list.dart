@@ -17,7 +17,7 @@ enum ApplicationType {
   both,
 }
 
-class SettingsList extends StatelessWidget {
+class SettingsList extends StatefulWidget {
   const SettingsList({
     required this.sections,
     this.shrinkWrap = false,
@@ -42,17 +42,93 @@ class SettingsList extends StatelessWidget {
   final ApplicationType applicationType;
 
   @override
+  State<SettingsList> createState() => _SettingsListState();
+}
+
+class _SettingsListState extends State<SettingsList> {
+  Future<_PlatformVersions?>? _platformVersionsFuture;
+  _PlatformVersions? _platformVersionsFallback;
+  DevicePlatform? _versionsFuturePlatform;
+
+  @override
   Widget build(BuildContext context) {
     DevicePlatform platform;
-    if (this.platform == null || this.platform == DevicePlatform.device) {
+    if (widget.platform == null || widget.platform == DevicePlatform.device) {
       platform = detectPlatform(context);
     } else {
-      platform = this.platform!;
+      platform = widget.platform!;
     }
 
-    final brightness = calculateBrightness(context);
-    final androidSdkInt = detectAndroidSdkInt(platform);
-    final iosVersionInt = detectIosMajorVersion(platform);
+    _ensureVersionsFuture(platform);
+
+    if (_platformVersionsFuture == null) {
+      return _buildList(
+        context: context,
+        platform: platform,
+        androidSdkInt: null,
+        iosVersionInt: null,
+      );
+    }
+
+    return FutureBuilder<_PlatformVersions?>(
+      future: _platformVersionsFuture,
+      initialData: _platformVersionsFallback,
+      builder: (context, snapshot) {
+        final resolvedVersions = snapshot.data ?? _platformVersionsFallback;
+
+        return _buildList(
+          context: context,
+          platform: platform,
+          androidSdkInt: resolvedVersions?.androidSdkInt,
+          iosVersionInt: resolvedVersions?.iosVersionInt,
+        );
+      },
+    );
+  }
+
+  void _ensureVersionsFuture(DevicePlatform platform) {
+    if (platform != DevicePlatform.android && platform != DevicePlatform.iOS) {
+      _versionsFuturePlatform = platform;
+      _platformVersionsFuture = null;
+      _platformVersionsFallback = null;
+      return;
+    }
+
+    if (_versionsFuturePlatform == platform &&
+        _platformVersionsFuture != null) {
+      return;
+    }
+
+    _versionsFuturePlatform = platform;
+    _platformVersionsFallback = _PlatformVersions(
+      androidSdkInt: detectAndroidSdkInt(platform),
+      iosVersionInt: detectIosMajorVersion(platform),
+    );
+
+    if (platform == DevicePlatform.android) {
+      _platformVersionsFuture = resolveAndroidSdkInt(platform).then(
+        (sdkInt) => _PlatformVersions(
+          androidSdkInt: sdkInt ?? _platformVersionsFallback?.androidSdkInt,
+        ),
+      );
+      return;
+    }
+
+    _platformVersionsFuture = resolveIosMajorVersion(platform).then(
+      (iosVersionInt) => _PlatformVersions(
+        iosVersionInt:
+            iosVersionInt ?? _platformVersionsFallback?.iosVersionInt,
+      ),
+    );
+  }
+
+  Widget _buildList({
+    required BuildContext context,
+    required DevicePlatform platform,
+    required int? androidSdkInt,
+    required int? iosVersionInt,
+  }) {
+    final brightness = calculateBrightness(context, platform);
 
     final themeData = getTheme(
       context: context,
@@ -60,7 +136,10 @@ class SettingsList extends StatelessWidget {
       brightness: brightness,
       androidSdkInt: androidSdkInt,
       iosVersionInt: iosVersionInt,
-    ).merge(theme: brightness == Brightness.dark ? darkTheme : lightTheme);
+    ).merge(
+      theme:
+          brightness == Brightness.dark ? widget.darkTheme : widget.lightTheme,
+    );
 
     return Container(
       color: themeData.settingsListBackground,
@@ -74,13 +153,13 @@ class SettingsList extends StatelessWidget {
             androidSdkInt: androidSdkInt,
             iosVersionInt: iosVersionInt,
             child: ListView.builder(
-              physics: physics,
-              shrinkWrap: shrinkWrap,
-              itemCount: sections.length,
-              padding: contentPadding ??
+              physics: widget.physics,
+              shrinkWrap: widget.shrinkWrap,
+              itemCount: widget.sections.length,
+              padding: widget.contentPadding ??
                   calculateDefaultPadding(platform, layout.maxWidth),
               itemBuilder: (BuildContext context, int index) {
-                return sections[index];
+                return widget.sections[index];
               },
             ),
           );
@@ -134,20 +213,33 @@ class SettingsList extends StatelessWidget {
     }
   }
 
-  Brightness calculateBrightness(BuildContext context) {
+  Brightness calculateBrightness(
+    BuildContext context,
+    DevicePlatform resolvedPlatform,
+  ) {
     final materialBrightness = Theme.of(context).brightness;
     final cupertinoBrightness = CupertinoTheme.of(context).brightness ??
         MediaQuery.of(context).platformBrightness;
 
-    switch (applicationType) {
+    switch (widget.applicationType) {
       case ApplicationType.material:
         return materialBrightness;
       case ApplicationType.cupertino:
         return cupertinoBrightness;
       case ApplicationType.both:
-        return platform != DevicePlatform.iOS
+        return resolvedPlatform != DevicePlatform.iOS
             ? materialBrightness
             : cupertinoBrightness;
     }
   }
+}
+
+class _PlatformVersions {
+  const _PlatformVersions({
+    this.androidSdkInt,
+    this.iosVersionInt,
+  });
+
+  final int? androidSdkInt;
+  final int? iosVersionInt;
 }
