@@ -17,8 +17,8 @@ class SliverSettingsList extends StatefulWidget {
     this.brightness,
     this.contentPadding,
     this.applicationType = ApplicationType.material,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool shrinkWrap;
   final ScrollPhysics? physics;
@@ -118,20 +118,23 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
   }) {
     final brightness = calculateBrightness(context, platform);
 
-    final themeData = getTheme(
-      context: context,
-      platform: platform,
-      brightness: brightness,
-      androidSdkInt: androidSdkInt,
-      iosVersionInt: iosVersionInt,
-    ).merge(
-      theme:
-          brightness == Brightness.dark ? widget.darkTheme : widget.lightTheme,
-    );
+    final themeData =
+        getTheme(
+          context: context,
+          platform: platform,
+          brightness: brightness,
+          androidSdkInt: androidSdkInt,
+          iosVersionInt: iosVersionInt,
+        ).merge(
+          theme: brightness == Brightness.dark
+              ? widget.darkTheme
+              : widget.lightTheme,
+        );
 
     return SliverLayoutBuilder(
       builder: (context, layout) {
-        final resolvedPadding = widget.contentPadding ??
+        final resolvedPadding =
+            widget.contentPadding ??
             calculateDefaultPadding(platform, layout.crossAxisExtent);
 
         return SettingsTheme(
@@ -149,7 +152,7 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
                   final section = widget.sections[index];
                   final isAndroidSdk36OrAbove =
                       platform == DevicePlatform.android &&
-                          (androidSdkInt ?? 0) >= 36;
+                      (androidSdkInt ?? 0) >= 36;
 
                   if (!isAndroidSdk36OrAbove ||
                       index == widget.sections.length - 1) {
@@ -170,10 +173,7 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
     );
   }
 
-  EdgeInsets calculateDefaultPadding(
-    DevicePlatform platform,
-    double width,
-  ) {
+  EdgeInsets calculateDefaultPadding(DevicePlatform platform, double width) {
     if (width > 810) {
       final padding = (width - 810) / 2;
       switch (platform) {
@@ -190,7 +190,6 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
         case DevicePlatform.iOS:
         case DevicePlatform.macOS:
         case DevicePlatform.windows:
-        default:
           return EdgeInsets.symmetric(horizontal: padding);
       }
     }
@@ -218,7 +217,8 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
     DevicePlatform resolvedPlatform,
   ) {
     final materialBrightness = Theme.of(context).brightness;
-    final cupertinoBrightness = CupertinoTheme.of(context).brightness ??
+    final cupertinoBrightness =
+        CupertinoTheme.of(context).brightness ??
         MediaQuery.of(context).platformBrightness;
 
     switch (widget.applicationType) {
@@ -235,10 +235,7 @@ class _SliverSettingsListState extends State<SliverSettingsList> {
 }
 
 class _PlatformVersions {
-  const _PlatformVersions({
-    this.androidSdkInt,
-    this.iosVersionInt,
-  });
+  const _PlatformVersions({this.androidSdkInt, this.iosVersionInt});
 
   final int? androidSdkInt;
   final int? iosVersionInt;

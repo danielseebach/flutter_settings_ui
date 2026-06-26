@@ -7,8 +7,8 @@ class AndroidSettingsSection extends StatelessWidget {
     required this.tiles,
     required this.margin,
     this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<AbstractSettingsTile> tiles;
   final EdgeInsetsDirectional? margin;
@@ -28,8 +28,9 @@ class AndroidSettingsSection extends StatelessWidget {
     final titleTopPadding = theme.themeData.androidSectionTitleTopPadding ?? 24;
     final titleBottomPadding =
         theme.themeData.androidSectionTitleBottomPadding ?? 10;
-    final gapBetweenTiles =
-        isSdk36OrAbove ? (theme.themeData.androidGapBetweenTiles ?? 4) : 0.0;
+    final gapBetweenTiles = isSdk36OrAbove
+        ? (theme.themeData.androidGapBetweenTiles ?? 4)
+        : 0.0;
     final sectionBorderRadius = theme.themeData.androidSectionBorderRadius ?? 0;
 
     final tileChildren = <Widget>[];
@@ -72,9 +73,7 @@ class AndroidSettingsSection extends StatelessWidget {
             end: titleHorizontalPadding,
           ),
           child: DefaultTextStyle(
-            style: TextStyle(
-              color: theme.themeData.titleTextColor,
-            ),
+            style: TextStyle(color: theme.themeData.titleTextColor),
             child: title!,
           ),
         ),

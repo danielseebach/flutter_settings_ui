@@ -7,8 +7,8 @@ class IOSSettingsSection extends StatelessWidget {
     required this.tiles,
     required this.margin,
     required this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<AbstractSettingsTile> tiles;
   final EdgeInsetsDirectional? margin;
@@ -17,12 +17,14 @@ class IOSSettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = SettingsTheme.of(context);
-    final isLastNonDescriptive = tiles.last is SettingsTile &&
+    final isLastNonDescriptive =
+        tiles.last is SettingsTile &&
         (tiles.last as SettingsTile).description == null;
     final scaleFactor = MediaQuery.textScalerOf(context).scale(1);
 
     return Padding(
-      padding: margin ??
+      padding:
+          margin ??
           EdgeInsets.only(
             top: 14.0 * scaleFactor,
             bottom: isLastNonDescriptive ? 27 * scaleFactor : 10 * scaleFactor,

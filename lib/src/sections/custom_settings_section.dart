@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/src/sections/abstract_settings_section.dart';
 
 class CustomSettingsSection extends AbstractSettingsSection {
-  const CustomSettingsSection({
-    required this.child,
-    Key? key,
-  }) : super(key: key);
+  const CustomSettingsSection({required this.child, super.key});
 
   final Widget child;
 

@@ -8,20 +8,20 @@ class SettingsTheme extends InheritedWidget {
   final int? iosVersionInt;
 
   const SettingsTheme({
-    Key? key,
+    super.key,
     required this.themeData,
     required this.platform,
     this.androidSdkInt,
     this.iosVersionInt,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(SettingsTheme old) => true;
 
   static SettingsTheme of(BuildContext context) {
-    final SettingsTheme? result =
-        context.dependOnInheritedWidgetOfExactType<SettingsTheme>();
+    final SettingsTheme? result = context
+        .dependOnInheritedWidgetOfExactType<SettingsTheme>();
     return result!;
   }
 
@@ -83,9 +83,7 @@ class SettingsThemeData {
   final double? androidGapBetweenTiles;
   final double? androidGapBetweenSections;
 
-  SettingsThemeData merge({
-    SettingsThemeData? theme,
-  }) {
+  SettingsThemeData merge({SettingsThemeData? theme}) {
     if (theme == null) return this;
 
     return copyWith(
@@ -163,7 +161,8 @@ class SettingsThemeData {
           androidLeadingStartPadding ?? this.androidLeadingStartPadding,
       androidSectionTitleTopPadding:
           androidSectionTitleTopPadding ?? this.androidSectionTitleTopPadding,
-      androidSectionTitleBottomPadding: androidSectionTitleBottomPadding ??
+      androidSectionTitleBottomPadding:
+          androidSectionTitleBottomPadding ??
           this.androidSectionTitleBottomPadding,
       androidTitleFontSize: androidTitleFontSize ?? this.androidTitleFontSize,
       androidTitleFontWeight:

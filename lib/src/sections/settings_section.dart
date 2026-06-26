@@ -12,8 +12,8 @@ class SettingsSection extends AbstractSettingsSection {
     required this.tiles,
     this.margin,
     this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<AbstractSettingsTile> tiles;
   final EdgeInsetsDirectional? margin;
@@ -35,17 +35,9 @@ class SettingsSection extends AbstractSettingsSection {
       case DevicePlatform.iOS:
       case DevicePlatform.macOS:
       case DevicePlatform.windows:
-        return IOSSettingsSection(
-          title: title,
-          tiles: tiles,
-          margin: margin,
-        );
+        return IOSSettingsSection(title: title, tiles: tiles, margin: margin);
       case DevicePlatform.web:
-        return WebSettingsSection(
-          title: title,
-          tiles: tiles,
-          margin: margin,
-        );
+        return WebSettingsSection(title: title, tiles: tiles, margin: margin);
       case DevicePlatform.device:
         throw Exception(
           "You can't use the DevicePlatform.device in this context. "

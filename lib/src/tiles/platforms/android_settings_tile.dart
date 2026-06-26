@@ -15,8 +15,8 @@ class AndroidSettingsTile extends StatelessWidget {
     required this.enabled,
     required this.trailing,
     required this.backgroundColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SettingsTileType tileType;
   final Widget? leading;
@@ -70,8 +70,9 @@ class AndroidSettingsTile extends StatelessWidget {
             children: [
               if (leading != null)
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.only(start: leadingStartPadding),
+                  padding: EdgeInsetsDirectional.only(
+                    start: leadingStartPadding,
+                  ),
                   child: IconTheme(
                     data: IconTheme.of(context).copyWith(
                       color: enabled

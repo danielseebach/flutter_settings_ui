@@ -17,8 +17,8 @@ class IOSSettingsTile extends StatefulWidget {
     required this.trailing,
     required this.descriptionInline,
     required this.backgroundColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SettingsTileType tileType;
   final Widget? leading;
@@ -74,10 +74,7 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
     Widget content = buildTileContent(context, theme, additionalInfo);
     final platform = detectPlatform(context);
     if (platform != DevicePlatform.iOS) {
-      content = Material(
-        color: Colors.transparent,
-        child: content,
-      );
+      content = Material(color: Colors.transparent, child: content);
     }
 
     return ClipRRect(
@@ -109,14 +106,9 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
         top: 8 * scaleFactor,
         bottom: additionalInfo.needToShowDivider ? 24 : 8 * scaleFactor,
       ),
-      decoration: BoxDecoration(
-        color: theme.themeData.settingsListBackground,
-      ),
+      decoration: BoxDecoration(color: theme.themeData.settingsListBackground),
       child: DefaultTextStyle(
-        style: TextStyle(
-          color: theme.themeData.titleTextColor,
-          fontSize: 13,
-        ),
+        style: TextStyle(color: theme.themeData.titleTextColor, fontSize: 13),
         child: widget.description!,
       ),
     );
@@ -155,12 +147,10 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 6, end: 2),
             child: IconTheme(
-              data: IconTheme.of(context)
-                  .copyWith(color: theme.themeData.leadingIconsColor),
-              child: Icon(
-                CupertinoIcons.forward,
-                size: 18 * scaleFactor,
-              ),
+              data: IconTheme.of(
+                context,
+              ).copyWith(color: theme.themeData.leadingIconsColor),
+              child: Icon(CupertinoIcons.forward, size: 18 * scaleFactor),
             ),
           ),
       ],
@@ -202,13 +192,12 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
       onTapUp: (_) => widget.onPressed == null ? null : changePressState(),
       onTapCancel: () => widget.onPressed == null ? null : changePressState(),
       child: Container(
-        color: widget.backgroundColor ??
+        color:
+            widget.backgroundColor ??
             (isPressed
                 ? theme.themeData.tileHighlightColor
                 : theme.themeData.settingsSectionBackground),
-        padding: const EdgeInsetsDirectional.only(
-          start: 18,
-        ),
+        padding: const EdgeInsetsDirectional.only(start: 18),
         child: Row(
           children: [
             if (widget.leading != null)
@@ -238,20 +227,22 @@ class IOSSettingsTileState extends State<IOSSettingsTile> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.only(
-                                  top: widget.description != null &&
+                                  top:
+                                      widget.description != null &&
                                           widget.descriptionInline
                                       ? (theme.iosVersionInt ?? 0) >= 26
-                                          ? 18
-                                          : 6
+                                            ? 18
+                                            : 6
                                       : (theme.iosVersionInt ?? 0) >= 26
-                                          ? 18
-                                          : 12.5 * scaleFactor,
-                                  bottom: widget.description != null &&
+                                      ? 18
+                                      : 12.5 * scaleFactor,
+                                  bottom:
+                                      widget.description != null &&
                                           widget.descriptionInline
                                       ? 3
                                       : (theme.iosVersionInt ?? 0) >= 26
-                                          ? 18
-                                          : 12.5 * scaleFactor,
+                                      ? 18
+                                      : 12.5 * scaleFactor,
                                 ),
                                 child: DefaultTextStyle(
                                   style: TextStyle(
@@ -310,12 +301,12 @@ class IOSSettingsTileAdditionalInfo extends InheritedWidget {
   final bool enableBottomBorderRadius;
 
   const IOSSettingsTileAdditionalInfo({
-    Key? key,
+    super.key,
     required this.needToShowDivider,
     required this.enableTopBorderRadius,
     required this.enableBottomBorderRadius,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   factory IOSSettingsTileAdditionalInfo.of(BuildContext context) {
     final IOSSettingsTileAdditionalInfo? result = context

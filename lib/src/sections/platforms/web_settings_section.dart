@@ -6,8 +6,8 @@ class WebSettingsSection extends StatelessWidget {
     required this.tiles,
     required this.margin,
     required this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<AbstractSettingsTile> tiles;
   final EdgeInsetsDirectional? margin;
@@ -45,8 +45,9 @@ class WebSettingsSection extends StatelessWidget {
               ),
             ),
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             elevation: 4,
             color: theme.themeData.settingsSectionBackground,
             child: buildTileList(),
@@ -66,10 +67,7 @@ class WebSettingsSection extends StatelessWidget {
         return tiles[index];
       },
       separatorBuilder: (BuildContext context, int index) {
-        return const Divider(
-          height: 0,
-          thickness: 1,
-        );
+        return const Divider(height: 0, thickness: 1);
       },
     );
   }

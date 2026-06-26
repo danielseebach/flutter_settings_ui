@@ -19,8 +19,8 @@ class SettingsTile extends AbstractSettingsTile {
     this.onPressed,
     this.enabled = true,
     this.backgroundColor,
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     onToggle = null;
     initialValue = null;
     activeSwitchColor = null;
@@ -37,8 +37,8 @@ class SettingsTile extends AbstractSettingsTile {
     this.onPressed,
     this.enabled = true,
     this.backgroundColor,
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     onToggle = null;
     initialValue = null;
     activeSwitchColor = null;
@@ -57,8 +57,8 @@ class SettingsTile extends AbstractSettingsTile {
     this.onPressed,
     this.enabled = true,
     this.backgroundColor,
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     value = null;
     tileType = SettingsTileType.switchTile;
   }

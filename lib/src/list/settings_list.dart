@@ -28,8 +28,8 @@ class SettingsList extends StatefulWidget {
     this.brightness,
     this.contentPadding,
     this.applicationType = ApplicationType.material,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool shrinkWrap;
   final ScrollPhysics? physics;
@@ -130,16 +130,18 @@ class _SettingsListState extends State<SettingsList> {
   }) {
     final brightness = calculateBrightness(context, platform);
 
-    final themeData = getTheme(
-      context: context,
-      platform: platform,
-      brightness: brightness,
-      androidSdkInt: androidSdkInt,
-      iosVersionInt: iosVersionInt,
-    ).merge(
-      theme:
-          brightness == Brightness.dark ? widget.darkTheme : widget.lightTheme,
-    );
+    final themeData =
+        getTheme(
+          context: context,
+          platform: platform,
+          brightness: brightness,
+          androidSdkInt: androidSdkInt,
+          iosVersionInt: iosVersionInt,
+        ).merge(
+          theme: brightness == Brightness.dark
+              ? widget.darkTheme
+              : widget.lightTheme,
+        );
 
     return Container(
       color: themeData.settingsListBackground,
@@ -156,7 +158,8 @@ class _SettingsListState extends State<SettingsList> {
               physics: widget.physics,
               shrinkWrap: widget.shrinkWrap,
               itemCount: widget.sections.length,
-              padding: widget.contentPadding ??
+              padding:
+                  widget.contentPadding ??
                   calculateDefaultPadding(platform, layout.maxWidth),
               itemBuilder: (BuildContext context, int index) {
                 return widget.sections[index];
@@ -168,10 +171,7 @@ class _SettingsListState extends State<SettingsList> {
     );
   }
 
-  EdgeInsets calculateDefaultPadding(
-    DevicePlatform platform,
-    double width,
-  ) {
+  EdgeInsets calculateDefaultPadding(DevicePlatform platform, double width) {
     if (width > 810) {
       final padding = (width - 810) / 2;
       switch (platform) {
@@ -188,10 +188,7 @@ class _SettingsListState extends State<SettingsList> {
         case DevicePlatform.iOS:
         case DevicePlatform.macOS:
         case DevicePlatform.windows:
-        default:
-          return EdgeInsets.symmetric(
-            horizontal: padding,
-          );
+          return EdgeInsets.symmetric(horizontal: padding);
       }
     }
 
@@ -218,7 +215,8 @@ class _SettingsListState extends State<SettingsList> {
     DevicePlatform resolvedPlatform,
   ) {
     final materialBrightness = Theme.of(context).brightness;
-    final cupertinoBrightness = CupertinoTheme.of(context).brightness ??
+    final cupertinoBrightness =
+        CupertinoTheme.of(context).brightness ??
         MediaQuery.of(context).platformBrightness;
 
     switch (widget.applicationType) {
@@ -235,10 +233,7 @@ class _SettingsListState extends State<SettingsList> {
 }
 
 class _PlatformVersions {
-  const _PlatformVersions({
-    this.androidSdkInt,
-    this.iosVersionInt,
-  });
+  const _PlatformVersions({this.androidSdkInt, this.iosVersionInt});
 
   final int? androidSdkInt;
   final int? iosVersionInt;
